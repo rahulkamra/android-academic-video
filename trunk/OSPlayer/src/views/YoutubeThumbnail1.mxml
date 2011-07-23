@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:IconItemRenderer data="{data}" xmlns:fx="http://ns.adobe.com/mxml/2009"
+					xmlns:s="library://ns.adobe.com/flex/spark"
+					 iconWidth="48" iconHeight="48" click="imageClicked(event)"  iconField="thumb" labelField="title"  >
+<fx:Script>
+	<![CDATA[
+		
+		public var selID:String;
+		
+		private function imageClicked(e:Event):void {
+			trace("imageClicked " + data.urlID);
+			// Send the Movie ID to the parent document
+			//selID = data.urlID;
+		    //parentDocument._selectedID = data.urlID;
+		}
+		
+	]]>
+</fx:Script>
+	<fx:Declarations>
+		<!--<s:Image source="{data.thumb}" click="imageClicked(event)" width="40" height="40" />-->
+		 
+	</fx:Declarations>
+	
+	
+</s:IconItemRenderer>
