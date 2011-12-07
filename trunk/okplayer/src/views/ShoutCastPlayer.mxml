@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" title="ShoutCastPLayer" viewActivate="init()">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			public var SoundRequest:URLRequest;
+			public var Buffer:SoundLoaderContext;
+			public var SoundStream:Sound;
+			public var Channel:SoundChannel;
+			public function init():void {     
+				SoundRequest = new URLRequest('http://173.192.224.123:8512/;');
+				SoundRequest.cacheResponse = false;
+				SoundRequest.useCache = false;
+				Buffer = new SoundLoaderContext(100);  
+			} 
+			
+			private var temp:int = 0;
+			public function setupStream():void {
+				try {
+					if (null != Channel) {
+						Channel.stop();
+					}
+					SoundStream = new Sound;
+					SoundStream.load(SoundRequest, Buffer);
+				} catch (e:Error) {
+					trace('setupStream(): '+e.message);
+					temp++;
+					if(temp == 1){
+						setupStream();
+					}
+				}
+			}
+
+			
+			public function play():void {     
+				setupStream();     
+				Channel = SoundStream.play(0,0,null); 
+			} 
+			
+			public function stop():void {     
+				if (null != Channel) {        
+					Channel.stop();
+					SoundStream.close();
+				} 
+			}
+		]]>
+	</fx:Script>
+	<s:Button x="161" y="153" label="&gt;" click="play()"/>
+	<s:Button x="271" y="153" label="O" click="stop()"/>
+</s:View>
