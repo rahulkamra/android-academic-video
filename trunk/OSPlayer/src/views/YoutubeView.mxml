@@ -19,7 +19,8 @@
 			import spark.events.IndexChangeEvent;
 			
 			import ytfeeds.SimpleFeedGrabberExample;
-			
+			import mx.controls.SWFLoader;
+			import mx.core.FlexGlobals;
 			
 			/********** VARIABLES **********/
 			[Bindable]
@@ -28,6 +29,9 @@
 			
 			
 			public var _selectedID:String = "";
+			protected var loader:Loader;
+			protected var player:Object;
+			private var swfLoader:SWFLoader;
 			
 			/********** INIT **********/
 			public function init():void {
@@ -35,9 +39,159 @@
 				searchTerms.addEventListener(FlexEvent.ENTER, doSearch);
 				simpleFeedGrabberExample = new SimpleFeedGrabberExample();
 				simpleFeedGrabberExample.loadMostViewed();
+				
+				loader  = new Loader();
+				loader.contentLoaderInfo.addEventListener(Event.INIT, onLoaderInit);
+				loader.load(new URLRequest("http://www.youtube.com/apiplayer?version=3")); 
 			}
 			
 			/********** TAB BUTTON PRESSED **********/
+			/**
+			 *  Player init event handler
+			 */
+			protected function onLoaderInit(event:Event):void {
+				
+				// Set the YouTube Player listeners
+				// More info: http://code.google.com/apis/youtube/flash_api_reference.html#Events
+				loader.content.addEventListener("onReady", onPlayerReady);
+				loader.content.addEventListener("onError", onPlayerError);
+				loader.content.addEventListener("onStateChange", onPlayerStateChange);
+			}
+			
+			/**
+			 * On Player Ready
+			 * This event is fired when the player is loaded and initialized, meaning it is ready to receive API calls.
+			 */
+			protected function onPlayerReady(event:Event):void {
+				
+				player = loader.content;
+				
+				// Set the Player size 
+				player.setSize(this.stage.stageWidth, 
+					this.stage.stageHeight - FlexGlobals.topLevelApplication.actionBar.height );
+				
+				// Display the YouTubePlayer into an SWFLoader
+				/* swfLoader = new SWFLoader(); 
+				swfLoader.autoLoad = true;
+				swfLoader.setStyle("backgroundColor", 0x333333)
+				swfLoader.scaleContent = true;
+				swfLoader.maintainAspectRatio = true;
+				addElement(swfLoader)	 */	
+				ytloader.autoLoad = true;
+				ytloader.scaleContent = true;
+				ytloader.maintainAspectRatio = true;
+				ytloader.load(player);
+				
+				
+				
+				// Play the Video
+				// The property 'data' contains the video ID passed  
+				// from the HomeView (i.e. "LDfM5c0ZKOw")
+				playVideo(data as String);
+			}
+			
+			/**
+			 * Video Player Stage Change
+			 * This event is fired whenever the player's state changes. 
+			 * Possible values are unstarted (-1), ended (0), playing (1),
+			 * paused (2), buffering (3), video cued (5). 
+			 * When the SWF is first loaded it will broadcast an unstarted (-1) event. 
+			 * When the video is cued and ready to play it will broadcast a video cued event (5).
+			 */
+			protected function onPlayerStateChange(event:Event):void {
+				trace("Player state changed:", Object(event).data);
+				
+				switch (Object(event).data) {
+					
+					
+					// STOP
+					case -1:
+						// do nothing
+						break;
+					
+					// end
+					case 0:
+						// do nothing
+						break;
+					
+					// play
+					case 1:
+						// do nothing
+						break;
+					
+					// PAUSED
+					case 2:
+						// do nothing
+						break;
+					
+					// BUFFERING
+					case 3:
+						// do nothing
+						break;
+					
+					
+				}
+				
+				
+			}
+			
+			/**
+			 * Video Player Error event handler
+			 * This event is fired when an error in the player occurs.
+			 */
+			protected function onPlayerError(event:Event):void {
+				trace("Player error:", Object(event).data);
+			}
+			
+			/**
+			 * Play Video
+			 * @param	videoID		The YouTube video ID to play
+			 */
+			public function playVideo(videoID:String) : void
+			{
+				
+				// Loads the specified video's thumbnail 
+				// and prepares the player to play the video
+				player.cueVideoById(videoID);
+				
+				// You can also use:
+				// loadVideoById
+				// cueVideoByUrl
+				
+				// More info: 
+				// http://code.google.com/apis/youtube/flash_api_reference.html#Functions
+				
+			}
+			
+			/**
+			 * Dispose
+			 * Help garbage collector to remove everything from memory
+			 */
+			public function dispose():void {
+				
+				loader.contentLoaderInfo.removeEventListener(Event.INIT, onLoaderInit);
+				loader.content.removeEventListener("onReady", onPlayerReady);
+				loader.content.removeEventListener("onError", onPlayerError);
+				loader.content.removeEventListener("onStateChange", onPlayerStateChange);
+				
+				
+				try {
+					
+					player.stopVideo();
+					
+					// More info: http://code.google.com/apis/youtube/flash_api_reference.html#SpecialFunctions
+					player.destroy();
+				} catch (e:Error) { trace("error")}
+				
+				
+				removeElement(swfLoader)
+				swfLoader = null;
+				player = null;
+				
+				loader.unload();
+				loader = null;
+			}
+			
 			
 			
 			/********** DO SEARCH **********/
@@ -72,6 +226,7 @@
 			{
 				// TODO Auto-generated method stub
 				selectedID = itemsList.selectedItem.urlID;
+				playVideo(selectedID);
 			}
 			
 		]]>
@@ -87,12 +242,14 @@
 			</s:HGroup>
 			
 		
-		<s:List id="itemsList" x="10" y="167" width="460" height="292"
+		<s:List id="itemsList" x="10" y="396" width="460" height="213"
 				dataProvider="{simpleFeedGrabberExample.ytVideoDetailsArrayCollection}"
 				itemRenderer="views.YoutubeThumbnail1" change="itemsList_changeHandler(event)" />
 	<s:Button x="5" y="54" label="Search" click="button1_clickHandler(event)" />
 		
-	
+	<s:SWFLoader id="ytloader" x="10" y="128" width="460" height="260">
+		
+	</s:SWFLoader>
 		
 	
 </s:View>
