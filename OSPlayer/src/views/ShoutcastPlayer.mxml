@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" title="ShoutcastPlayer" >
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import mx.controls.SWFLoader;
+			import mx.core.FlexGlobals;
+			import mx.managers.SystemManager;
+			
+			
+			
+			public var loader:Loader;
+			/**
+			 * Init
+			 */
+			public function init():void
+			{
+				
+				// Prevents the system from dropping into an idle mode.
+				//loader.content = player.content;
+				//loader.playlistID = "58976955";
+			}
+			
+			
+			
+		]]>
+	</fx:Script>
+	<s:SWFLoader id="player" source="widget.swf?playlistID=58976955" creationComplete="init()">
+	
+	</s:SWFLoader>
+	
+</s:View>
