@@ -1,12 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		xmlns:s="library://ns.adobe.com/flex/spark" title="ShoutCast">
+		xmlns:s="library://ns.adobe.com/flex/spark" title="ShoutCast" viewActivate="view1_viewActivateHandler(event)">
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
 	<fx:Script>
 		<![CDATA[
+			import spark.events.ViewNavigatorEvent;
+			
+			protected function view1_viewActivateHandler(event:ViewNavigatorEvent):void
+			{
+				// TODO Auto-generated method stub
+				navigator.pushView(views.ShoutcastPlayer);
+			}
+			
+			protected function button1_clickHandler(event:MouseEvent):void
+			{
+				
+				
+			}
 			
 		]]>
 	</fx:Script>
+	<s:TextInput id="searchTerms" width="268" height="44" maxChars="30"
+				 restrict="A-Z a-z 012345689" text="Search"/>
+	<s:Button x="5" y="54" label="Search" click="button1_clickHandler(event)" />
 </s:View>
