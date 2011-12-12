@@ -3,7 +3,8 @@
 								  xmlns:s="library://ns.adobe.com/flex/spark" 
 								  persistNavigatorState="true" >
 	<s:ViewNavigator label="Youtube" width="100%" height="100%" firstView="views.YoutubeView"/>
-	<s:ViewNavigator label="ShoutCast" width="100%" height="100%" firstView="views.ShoutCastView"/>
+	<s:ViewNavigator label="GrooveShark" width="100%" height="100%" firstView="views.GrooveSharkView"/>
+	<s:ViewNavigator label="Shoutcast" width="100%" height="100%" firstView="views.ShoutcastView"/>
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>

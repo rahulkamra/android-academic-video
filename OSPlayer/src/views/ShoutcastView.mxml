@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" title="ShoutcastView" viewActivate="view1_viewActivateHandler(event)">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import com.dasflash.soundcloud.as3api.SoundcloudClient;
+			
+			import org.osmf.media.MediaElement;
+			
+			import spark.events.ViewNavigatorEvent;
+			
+			/* private var consumerKey:String = "60d657d56f451db6a5c71547606385a7";
+			private var consumerSecret = "bc4b64b3e3a0fc79516b43a06a0c8dc1";
+			private var var scClient:SoundcloudClient; */
+			
+			protected function view1_viewActivateHandler(event:ViewNavigatorEvent):void
+			{
+				// TODO Auto-generated method stub
+				/* 
+				scClient= new SoundcloudClient(consumerKey, consumerSecret);
+				scClient.getRequestToken();
+				scClient.authorizeUser(); */
+				
+			}
+			
+			protected function button1_clickHandler(event:MouseEvent):void
+			{
+				// TODO Auto-generated method stub
+				/* var reqURL:String = "http://api.soundcloud.com/tracks.json?client_id=60d657d56f451db6a5c71547606385a7&q="+scSearch.text+"&limit=10";
+				var urldwn:URLLoader = new URLLoader(reqURL);
+				urldwn.load(); */
+				//var smm:
+				var urlreq:URLRequest = new URLRequest("http://api.soundcloud.com/tracks/14626782/stream?oauth_consumer_key=60d657d56f451db6a5c71547606385a7");
+				var sndd:Sound = new Sound();
+				sndd.load(urlreq);
+				sndd.play();
+				
+			}
+			
+		]]>
+	</fx:Script>
+	<s:TextInput id="scSearch" x="20" y="88"/>
+	<s:Button x="186" y="192" label="Search" click="button1_clickHandler(event)"/>
+	
+</s:View>
