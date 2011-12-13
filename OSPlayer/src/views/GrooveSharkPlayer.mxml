@@ -28,7 +28,7 @@
 				//loader.playlistID = "58976955";
 				swfLoader = new SWFLoader(); 
 
-				var strSNG:String = "widget.swf?songID="+ data as String;
+				var strSNG:String = "widget.swf?songIDs="+ data as String;
 				swfLoader.source = strSNG;
 				swfLoader.autoLoad = true;
 				addElement(swfLoader);
