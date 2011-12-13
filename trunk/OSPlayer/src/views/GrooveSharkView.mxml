@@ -70,7 +70,18 @@
 			protected function itemsList_changeHandler(event:IndexChangeEvent):void
 			{
 				// TODO Auto-generated method stub
-				navigator.pushView(views.GrooveSharkPlayer, itemsList.selectedItem.SongID);
+				//navigator.pushView(views.GrooveSharkPlayer, itemsList.selectedItem.SongID);
+			}
+			
+			protected function button2_clickHandler(event:MouseEvent):void
+			{
+				// TODO Auto-generated method stub
+				var strr:String;
+				for (var i:int = 0; i < itemsList.selectedItems.length; i++)
+				{
+					strr = strr + itemsList.selectedItems[i].SongID + ',';
+				}
+				navigator.pushView(views.GrooveSharkPlayer, strr);
 			}
 			
 		]]>
@@ -80,5 +91,6 @@
 	<s:Button x="5" y="54" label="Search" click="button1_clickHandler(event)" />
 	<s:List id="itemsList" x="10" y="167" width="460" height="292"
 			dataProvider="{arrcoll}"
-			itemRenderer="views.GrooveSharkThumbnail" change="itemsList_changeHandler(event)" />
+			itemRenderer="views.GrooveSharkThumbnail" change="itemsList_changeHandler(event)" allowMultipleSelection="true"  />
+	<s:Button x="367" y="54" label="Play" click="button2_clickHandler(event)"/>
 </s:View>
