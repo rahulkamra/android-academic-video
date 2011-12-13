@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		xmlns:s="library://ns.adobe.com/flex/spark" title="GrooveSharkPlayer" >
+		xmlns:s="library://ns.adobe.com/flex/spark" title="GrooveSharkPlayer" viewActivate="init()" viewDeactivate="view1_viewDeactivateHandler(event)" >
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
@@ -9,10 +9,14 @@
 			import mx.controls.SWFLoader;
 			import mx.core.FlexGlobals;
 			import mx.managers.SystemManager;
+			import mx.messaging.channels.NetConnectionChannel;
 			
+			import spark.events.ViewNavigatorEvent;
 			
+			private var swfLoader:SWFLoader;
 			
 			public var loader:Loader;
+			
 			/**
 			 * Init
 			 */
@@ -22,14 +26,34 @@
 				// Prevents the system from dropping into an idle mode.
 				//loader.content = player.content;
 				//loader.playlistID = "58976955";
+				swfLoader = new SWFLoader(); 
+
+				var strSNG:String = "widget.swf?songID="+ data as String;
+				swfLoader.source = strSNG;
+				swfLoader.autoLoad = true;
+				addElement(swfLoader);
 			}
 			
 			
 			
+			protected function view1_viewDeactivateHandler(event:ViewNavigatorEvent):void
+			{
+				// TODO Auto-generated method stub
+				//swfLoader.
+				
+				SoundMixer.stopAll(); 
+				swfLoader.source = "";
+				swfLoader.load(null); 
+				swfLoader.unloadAndStop(true);
+				removeElement(swfLoader)
+				swfLoader = null;
+				
+			}
+			
 		]]>
 	</fx:Script>
-	<s:SWFLoader id="player" source="widget.swf?playlistID=58976955" creationComplete="init()">
+	<!--<s:SWFLoader id="player" source="widget.swf?playlistID=58976955" creationComplete="init()">
 	
-	</s:SWFLoader>
+	</s:SWFLoader>-->
 	
 </s:View>
