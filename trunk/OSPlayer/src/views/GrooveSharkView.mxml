@@ -92,6 +92,13 @@
 				pllabel.text = j.toString()+" Songs Selected";
 			}
 			
+			protected function button4_clickHandler(event:MouseEvent):void
+			{
+				// TODO Auto-generated method stub
+				pllist = "";
+				pllabel.text = "0 Songs Selected";
+			}
+			
 		]]>
 	</fx:Script>
 	<s:TextInput id="searchTerms" x="10" y="10" width="343" height="44" maxChars="30"
@@ -100,8 +107,10 @@
 	<s:List id="itemsList" x="10" y="167" width="460" height="442"
 			dataProvider="{arrcoll}"
 			itemRenderer="views.GrooveSharkThumbnail" change="itemsList_changeHandler(event)" allowMultipleSelection="true"  />
-	<s:Button x="361" y="84" width="109" height="48" label="Play" click="button2_clickHandler(event)"/>
-	<s:Button x="10" y="84" width="219" height="48" label="+ Add to Playlist"
+	<s:Button x="361" y="86" width="109" height="48" label="Play" click="button2_clickHandler(event)"/>
+	<s:Button x="10" y="86" width="219" height="48" label="+ Add to Playlist"
 			  click="button3_clickHandler(event)"/>
-	<s:Label id="pllabel" x="10" y="140" width="116" height="23" fontSize="14" text="0 Songs Selected"/>
+	<s:Label id="pllabel" x="10" y="144" width="116" height="23" fontSize="14" text="0 Songs Selected"/>
+	<s:Button x="237" y="86" width="73" height="48" label="Reset" click="button4_clickHandler(event)"
+			  enabled="true" fontSize="14"/>
 </s:View>
