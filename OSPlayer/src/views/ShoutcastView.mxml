@@ -6,15 +6,24 @@
 	</fx:Declarations>
 	<fx:Script>
 		<![CDATA[
+			import com.adobe.serialization.json.JSON;
 			import com.dasflash.soundcloud.as3api.SoundcloudClient;
+			
+			import mx.collections.ArrayCollection;
 			
 			import org.osmf.media.MediaElement;
 			
+			import spark.events.IndexChangeEvent;
 			import spark.events.ViewNavigatorEvent;
 			
 			/* private var consumerKey:String = "60d657d56f451db6a5c71547606385a7";
 			private var consumerSecret = "bc4b64b3e3a0fc79516b43a06a0c8dc1";
 			private var var scClient:SoundcloudClient; */
+			private var loader:URLLoader;
+			private var sndd:Sound;
+			
+			[Bindable]
+			private var arrcoll:ArrayCollection;
 			
 			protected function view1_viewActivateHandler(event:ViewNavigatorEvent):void
 			{
@@ -33,16 +42,81 @@
 				var urldwn:URLLoader = new URLLoader(reqURL);
 				urldwn.load(); */
 				//var smm:
-				var urlreq:URLRequest = new URLRequest("http://api.soundcloud.com/tracks/14626782/stream?oauth_consumer_key=60d657d56f451db6a5c71547606385a7");
+				/* var urlreq:URLRequest = new URLRequest("http://api.soundcloud.com/tracks/14626782/stream?oauth_consumer_key=60d657d56f451db6a5c71547606385a7");
 				var sndd:Sound = new Sound();
 				sndd.load(urlreq);
-				sndd.play();
+				sndd.play(); */
+				loader = new URLLoader();
+				configureListeners(loader);
+				var reqStr:String = "http://api.soundcloud.com/tracks.json?client_id=60d657d56f451db6a5c71547606385a7&limit=10&q=" + scSearch.text;
+				var request:URLRequest = new URLRequest(reqStr);
+				loader.load(request);
 				
+			}
+			private function configureListeners(dispatcher:IEventDispatcher):void {
+				dispatcher.addEventListener(Event.COMPLETE, completeHandler);
+				dispatcher.addEventListener(Event.OPEN, openHandler);
+				dispatcher.addEventListener(ProgressEvent.PROGRESS, progressHandler);
+				dispatcher.addEventListener(SecurityErrorEvent.SECURITY_ERROR, securityErrorHandler);
+				dispatcher.addEventListener(HTTPStatusEvent.HTTP_STATUS, httpStatusHandler);
+				dispatcher.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
+			}
+			
+			private function completeHandler(event:Event):void {
+				var arr:Array = (JSON.decode(loader.data) as Array);
+				arrcoll = new ArrayCollection(arr);
+			}
+			
+			private function openHandler(event:Event):void {
+				trace("openHandler: " + event);
+			}
+			
+			private function progressHandler(event:ProgressEvent):void {
+				trace("progressHandler loaded:" + event.bytesLoaded + " total: " + event.bytesTotal);
+			}
+			
+			private function securityErrorHandler(event:SecurityErrorEvent):void {
+				trace("securityErrorHandler: " + event);
+			}
+			
+			private function httpStatusHandler(event:HTTPStatusEvent):void {
+				trace("httpStatusHandler: " + event);
+			}
+			
+			private function ioErrorHandler(event:IOErrorEvent):void {
+				trace("ioErrorHandler: " + event);
+			}
+			protected function itemsList_changeHandler(event:IndexChangeEvent):void
+			{
+				// TODO Auto-generated method stub
+				
+			}
+			
+			protected function button2_clickHandler(event:MouseEvent):void
+			{
+				// TODO Auto-generated method stub
+				var strmm:String = itemsList.selectedItem.stream_url + "?oauth_consumer_key=60d657d56f451db6a5c71547606385a7"; 
+				var urlreq:URLRequest = new URLRequest(strmm);
+				sndd= new Sound();
+				sndd.load(urlreq);
+				sndd.play();
+			}
+			
+			protected function button3_clickHandler(event:MouseEvent):void
+			{
+				// TODO Auto-generated method stub
+				sndd.close();
+				SoundMixer.stopAll();
 			}
 			
 		]]>
 	</fx:Script>
-	<s:TextInput id="scSearch" x="20" y="88"/>
-	<s:Button x="186" y="192" label="Search" click="button1_clickHandler(event)"/>
-	
+	<s:TextInput id="scSearch" x="11" y="10" width="459"/>
+	<s:Button x="11" y="74" label="Search" click="button1_clickHandler(event)"/>
+	<s:List id="itemsList" x="11" y="169" width="460" height="323"
+			dataProvider="{arrcoll}"
+			itemRenderer="views.SoundCloudThumbnail" change="itemsList_changeHandler(event)"  />
+	<s:Button x="101" y="518" height="47" label="Play" click="button2_clickHandler(event)"/>
+	<s:Button x="188" y="518" height="47" label="Pause" click="button3_clickHandler(event)"/>
+	<s:Button x="296" y="518" height="47" label="Stop"/>
 </s:View>
