@@ -22,7 +22,7 @@
 			 */
 			public function init():void
 			{
-				
+				NativeApplication.nativeApplication.systemIdleMode = SystemIdleMode.KEEP_AWAKE;
 				// Prevents the system from dropping into an idle mode.
 				//loader.content = player.content;
 				//loader.playlistID = "58976955";
@@ -47,7 +47,7 @@
 				swfLoader.unloadAndStop(true);
 				removeElement(swfLoader)
 				swfLoader = null;
-				
+				NativeApplication.nativeApplication.systemIdleMode = SystemIdleMode.NORMAL;
 			}
 			
 		]]>

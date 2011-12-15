@@ -94,11 +94,11 @@
 	
 		
 			
-		<s:List id="itemsList" x="9" y="135" width="460" height="474"
+		<s:List id="itemsList" x="9" y="72" width="460" height="537"
 				dataProvider="{simpleFeedGrabberExample.ytVideoDetailsArrayCollection}"
 				itemRenderer="views.YoutubeThumbnail1" change="itemsList_changeHandler(event)" />
-	<s:Button x="10" y="62" label="Search" click="button1_clickHandler(event)" />
-	<s:TextInput id="searchTerms" x="10" y="10" width="268" height="44" maxChars="30"
+	<s:Button x="361" y="10" height="44" label="Search" click="button1_clickHandler(event)"/>
+	<s:TextInput id="searchTerms" x="10" y="10" width="343" height="44" maxChars="30"
 				 restrict="A-Z a-z 012345689" text="Search"/>
 		
 	

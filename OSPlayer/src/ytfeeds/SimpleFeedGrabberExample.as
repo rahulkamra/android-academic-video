@@ -30,7 +30,7 @@ public class SimpleFeedGrabberExample {
 	[Bindable]
 	public var ytVideoDetailsArrayCollection:ArrayCollection; 
 	
-	private var maxFeedLength:Number = 20;
+	private var maxFeedLength:Number = 30;
 	protected var _ws:YouTubeFeedClient;		
 	protected var _requestId:Number;
 	

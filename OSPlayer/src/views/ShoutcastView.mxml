@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		xmlns:s="library://ns.adobe.com/flex/spark" title="SoundCloud" viewActivate="view1_viewActivateHandler(event)">
+		xmlns:s="library://ns.adobe.com/flex/spark" title="SoundCloud" viewActivate="view1_viewActivateHandler(event)" viewDeactivate="view1_viewDeactivateHandler(event)">
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
@@ -33,7 +33,7 @@
 				scClient= new SoundcloudClient(consumerKey, consumerSecret);
 				scClient.getRequestToken();
 				scClient.authorizeUser(); */
-				
+				NativeApplication.nativeApplication.systemIdleMode = SystemIdleMode.KEEP_AWAKE;
 			}
 			
 			protected function button1_clickHandler(event:MouseEvent):void
@@ -49,7 +49,7 @@
 				sndd.play(); */
 				loader = new URLLoader();
 				configureListeners(loader);
-				var reqStr:String = "http://api.soundcloud.com/tracks.json?client_id=60d657d56f451db6a5c71547606385a7&limit=10&q=" + scSearch.text;
+				var reqStr:String = "http://api.soundcloud.com/tracks.json?client_id=60d657d56f451db6a5c71547606385a7&limit=30&q=" + scSearch.text;
 				var request:URLRequest = new URLRequest(reqStr);
 				loader.load(request);
 				
@@ -128,14 +128,22 @@
 				sndd.close();
 			}
 			
+			protected function view1_viewDeactivateHandler(event:ViewNavigatorEvent):void
+			{
+				// TODO Auto-generated method stub
+				sndch.stop();
+				sndd.close();
+				NativeApplication.nativeApplication.systemIdleMode = SystemIdleMode.NORMAL;
+			}
+			
 		]]>
 	</fx:Script>
-	<s:TextInput id="scSearch" x="11" y="10" width="459"/>
-	<s:Button x="11" y="74" label="Search" click="button1_clickHandler(event)"/>
-	<s:List id="itemsList" x="11" y="169" width="460" height="323"
+	<s:TextInput id="scSearch" x="11" y="10" width="346" height="42"/>
+	<s:Button x="365" y="11" height="41" label="Search" click="button1_clickHandler(event)"/>
+	<s:List id="itemsList" x="11" y="73" width="460" height="461"
 			dataProvider="{arrcoll}"
 			itemRenderer="views.SoundCloudThumbnail" change="itemsList_changeHandler(event)"  />
-	<s:Button x="101" y="518" height="47" label="Play" click="button2_clickHandler(event)"/>
-	<s:Button x="188" y="518" height="47" label="Pause" click="button3_clickHandler(event)"/>
-	<s:Button x="296" y="518" height="47" label="Stop" click="button4_clickHandler(event)"/>
+	<s:Button x="101" y="553" height="47" label="Play" click="button2_clickHandler(event)"/>
+	<s:Button x="188" y="553" height="47" label="Pause" click="button3_clickHandler(event)"/>
+	<s:Button x="296" y="553" height="47" label="Stop" click="button4_clickHandler(event)"/>
 </s:View>

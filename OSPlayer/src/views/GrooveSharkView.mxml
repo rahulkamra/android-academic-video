@@ -28,7 +28,7 @@
 			{
 				loader = new URLLoader();
 				configureListeners(loader);
-				var reqStr:String = "http://tinysong.com/s/" + searchTerms.text+"?format=json&limit=10&key=d5d5997eea496a07922e003f547d1659";
+				var reqStr:String = "http://tinysong.com/s/" + searchTerms.text+"?format=json&limit=30&key=d5d5997eea496a07922e003f547d1659";
 				var request:URLRequest = new URLRequest(reqStr);
 				loader.load(request);
 				
