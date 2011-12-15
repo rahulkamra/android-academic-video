@@ -59,14 +59,14 @@
 				player = loader.content;
 				
 				// Set the Player size 
-				player.setSize(460, 
-					526 );
+				player.setSize(this.width, 
+					300);
 				
 				// Display the YouTubePlayer into an SWFLoader
 				swfLoader = new SWFLoader(); 
 				swfLoader.autoLoad = true;
 				swfLoader.setStyle("backgroundColor", 0x333333)
-				//swfLoader.scaleContent = true;
+				swfLoader.scaleContent = true;
 				swfLoader.maintainAspectRatio = true;
 				addElement(swfLoader)				
 				swfLoader.load(player);
