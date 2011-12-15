@@ -21,7 +21,8 @@
 			private var var scClient:SoundcloudClient; */
 			private var loader:URLLoader;
 			private var sndd:Sound;
-			
+			private var sndch:SoundChannel;
+			private var pausePosition:int = -1;
 			[Bindable]
 			private var arrcoll:ArrayCollection;
 			
@@ -95,18 +96,36 @@
 			protected function button2_clickHandler(event:MouseEvent):void
 			{
 				// TODO Auto-generated method stub
-				var strmm:String = itemsList.selectedItem.stream_url + "?oauth_consumer_key=60d657d56f451db6a5c71547606385a7"; 
-				var urlreq:URLRequest = new URLRequest(strmm);
-				sndd= new Sound();
-				sndd.load(urlreq);
-				sndd.play();
+				if(pausePosition == -1)
+				{
+					
+					var strmm:String = itemsList.selectedItem.stream_url + "?oauth_consumer_key=60d657d56f451db6a5c71547606385a7"; 
+					var urlreq:URLRequest = new URLRequest(strmm);
+					sndd= new Sound();
+					sndd.load(urlreq);
+					sndch= sndd.play();
+				}
+				else
+				{
+					sndch = sndd.play(pausePosition);
+					pausePosition = -1;
+				}
+				
+				
 			}
 			
 			protected function button3_clickHandler(event:MouseEvent):void
 			{
 				// TODO Auto-generated method stub
+				pausePosition = sndch.position;
+				sndch.stop();
+			}
+			
+			protected function button4_clickHandler(event:MouseEvent):void
+			{
+				// TODO Auto-generated method stub
+				sndch.stop();
 				sndd.close();
-				SoundMixer.stopAll();
 			}
 			
 		]]>
@@ -118,5 +137,5 @@
 			itemRenderer="views.SoundCloudThumbnail" change="itemsList_changeHandler(event)"  />
 	<s:Button x="101" y="518" height="47" label="Play" click="button2_clickHandler(event)"/>
 	<s:Button x="188" y="518" height="47" label="Pause" click="button3_clickHandler(event)"/>
-	<s:Button x="296" y="518" height="47" label="Stop"/>
+	<s:Button x="296" y="518" height="47" label="Stop" click="button4_clickHandler(event)"/>
 </s:View>
