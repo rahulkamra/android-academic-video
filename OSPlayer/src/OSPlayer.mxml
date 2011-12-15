@@ -1,8 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:TabbedViewNavigatorApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
+<s:TabbedViewNavigatorApplication  xmlns:fx="http://ns.adobe.com/mxml/2009" 
 								  xmlns:s="library://ns.adobe.com/flex/spark" 
-								  persistNavigatorState="true" >
-	<s:ViewNavigator label="Youtube" width="100%" height="100%" firstView="views.YoutubeView"/>
+								  persistNavigatorState="true" creationComplete="tabbedviewnavigatorapplication1_creationCompleteHandler(event)" >
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			
+			import spark.components.ViewNavigatorApplication;
+			import spark.events.IndexChangeEvent;
+			
+			import views.FirstView;
+			import views.YoutubeView;
+			
+			protected function tabbedviewnavigatorapplication1_creationCompleteHandler(event:FlexEvent):void
+			{
+				// TODO Auto-generated method stub
+				
+				tabbedNavigator.tabBar.enabled = false;
+				tabbedNavigator.tabBar.selectedIndex = -1;
+				tabbedNavigator.tabBar.enabled = true;
+				//tabbedNavigator.tabBar.requireSelection = false;
+				tabbedNavigator.tabBar.addEventListener(IndexChangeEvent.CHANGE, ontabclick);
+			}
+			
+			protected function ontabclick(event:IndexChangeEvent):void
+			{
+				// TODO Auto-generated method stub
+				//tabbedNavigator.tabBar.requireSelection = true;
+				/* firstv.firstView = null;
+				firstv.firstView = new FirstView();
+				firstv.firstView = views.YoutubeView; */
+				
+			}
+			
+		]]>
+	</fx:Script>
+	<!--<s:ViewNavigator id="firstv" label="Youtube" width="100%" height="100%" firstView="views.FirstView"/>-->
+	<s:ViewNavigator id="firstv" label="Youtube" width="100%" height="100%" firstView="views.YoutubeView"/>
 	<s:ViewNavigator label="GrooveShark" width="100%" height="100%" firstView="views.GrooveSharkView"/>
 	<s:ViewNavigator label="SoundCloud" width="100%" height="100%" firstView="views.ShoutcastView"/>
 	<fx:Declarations>
