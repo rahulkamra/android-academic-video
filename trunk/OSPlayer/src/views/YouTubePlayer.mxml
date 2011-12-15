@@ -24,7 +24,15 @@
 			 */
 			public function init():void
 			{
+				stage.autoOrients = "true";
+				//NativeApplication.nativeApplication.systemIdleMode = SystemIdleMode.KEEP_AWAKE;
 				
+				// If the stage is resized/orientation changed - explained below.
+				stage.addEventListener( Event.RESIZE, onStageResize );
+				
+				
+				// Called to set the viewPort for the _stageWebView the first time
+				onStageResize();
 				// Prevents the system from dropping into an idle mode.
 				NativeApplication.nativeApplication.systemIdleMode = SystemIdleMode.KEEP_AWAKE;
 				
@@ -35,6 +43,25 @@
 				loader.contentLoaderInfo.addEventListener(Event.INIT, onLoaderInit);
 				loader.load(new URLRequest("http://www.youtube.com/apiplayer?version=3"));   
 				
+			}
+			
+			private function onStageResize( e:Event=null ):void {
+				
+				if(stage.orientation == StageOrientation.ROTATED_LEFT || stage.orientation == StageOrientation.ROTATED_RIGHT)
+				{
+					this.tabBarVisible = false;
+					this.actionBarVisible = false;
+					if(player!=null)
+						player.setSize(stage.stageWidth,stage.stageHeight );
+					
+				}
+				else
+				{
+					this.tabBarVisible = true;
+					this.actionBarVisible = true;
+					if(player!=null)
+						player.setSize(stage.stageWidth,300 );
+				}
 			}
 			
 			
@@ -193,15 +220,33 @@
 				
 			}
 			
-			protected function button1_clickHandler(event:MouseEvent):void
+			
+			
+			protected function button2_clickHandler(event:MouseEvent):void
 			{
 				// TODO Auto-generated method stub
-				navigator.popView();
+				player.playVideo();
+			}
+			
+			protected function button3_clickHandler(event:MouseEvent):void
+			{
+				// TODO Auto-generated method stub
+				player.pauseVideo();
+			}
+			
+			protected function button4_clickHandler(event:MouseEvent):void
+			{
+				// TODO Auto-generated method stub
+				player.seekTo(0,false);
+				player.stopVideo();
+				
 			}
 			
 		]]>
 	</fx:Script>
-	<s:Button id="bkbtn" x="10" y="544" label="Back" click="button1_clickHandler(event)"/>
 	<s:Group x="10" y="10" width="460" height="526">
 	</s:Group>
+	<s:Button x="101" y="562" height="47" label="Play" click="button2_clickHandler(event)"/>
+	<s:Button x="188" y="562" height="47" label="Pause" click="button3_clickHandler(event)"/>
+	<s:Button x="296" y="562" height="47" label="Stop" click="button4_clickHandler(event)"/>
 </s:View>
