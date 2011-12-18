@@ -100,7 +100,7 @@
 			//When the video is cued and ready to play it will broadcast a video cued event (5).
 			/*** Video Player Stage Change ***/
 			protected function onPlayerStateChange(event:Event):void {
-				trace("Player state changed:", Object(event).data);
+				
 				
 				switch (Object(event).data) {
 					
@@ -139,7 +139,7 @@
 			//This event is fired when an error in the player occurs.
 			/*** Video Player Error event handler ***/
 			protected function onPlayerError(event:Event):void {
-				trace("Player error:", Object(event).data);
+				
 			}
 
 			//This method uses the YouTube video ID to play the video
@@ -165,7 +165,7 @@
 					player.stopVideo();
 				//Destroys the player object. Youtube API method
 					player.destroy();
-				} catch (e:Error) { trace("error")}
+				} catch (e:Error) { }
 				
 				
 				removeElement(swfLoader)

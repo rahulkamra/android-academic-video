@@ -24,7 +24,7 @@
 			
 			/********** INIT **********/
 			public function init():void {
-				trace('init');
+				
 				searchTerms.addEventListener(FlexEvent.ENTER, doSearch);
 				simpleFeedGrabberExample = new SimpleFeedGrabberExample();
 				simpleFeedGrabberExample.loadMostViewed();

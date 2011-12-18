@@ -65,27 +65,27 @@
 			
 			private function openHandler(event:Event):void 
 			{
-				trace("openHandler: " + event);
+				
 			}
 			
 			private function progressHandler(event:ProgressEvent):void 
 			{
-				trace("progressHandler loaded:" + event.bytesLoaded + " total: " + event.bytesTotal);
+				
 			}
 			
 			private function securityErrorHandler(event:SecurityErrorEvent):void 
 			{
-				trace("securityErrorHandler: " + event);
+				
 			}
 			
 			private function httpStatusHandler(event:HTTPStatusEvent):void 
 			{
-				trace("httpStatusHandler: " + event);
+				
 			}
 			
 			private function ioErrorHandler(event:IOErrorEvent):void 
 			{
-				trace("ioErrorHandler: " + event);
+				
 			}
 			protected function itemsList_changeHandler(event:IndexChangeEvent):void
 			{
