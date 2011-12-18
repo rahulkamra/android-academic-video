@@ -6,41 +6,35 @@
 	</fx:Declarations>
 	<fx:Script>
 		<![CDATA[
+			//Importing Flex LIbraries
 			import mx.controls.SWFLoader;
 			import mx.core.FlexGlobals;
 			import mx.managers.SystemManager;
 			import mx.messaging.channels.NetConnectionChannel;
-			
 			import spark.events.ViewNavigatorEvent;
 			
+			/********** VARIABLES **********/
 			private var swfLoader:SWFLoader;
-			
 			public var loader:Loader;
 			
-			/**
-			 * Init
-			 */
+			/*** Init ***/
 			public function init():void
 			{
-				NativeApplication.nativeApplication.systemIdleMode = SystemIdleMode.KEEP_AWAKE;
 				// Prevents the system from dropping into an idle mode.
-				//loader.content = player.content;
-				//loader.playlistID = "58976955";
+				NativeApplication.nativeApplication.systemIdleMode = SystemIdleMode.KEEP_AWAKE;
+				
+				// Loads the GrooveShark player widget on the page with selected song IDs from previous View
 				swfLoader = new SWFLoader(); 
-
 				var strSNG:String = "widget.swf?songIDs="+ data as String;
 				swfLoader.source = strSNG;
 				swfLoader.autoLoad = true;
 				addElement(swfLoader);
 			}
 			
-			
-			
+			//This method gets called when we switch back to any other view. Initiates cleanup operations
+			/*** View Deactivate event Handler ***/
 			protected function view1_viewDeactivateHandler(event:ViewNavigatorEvent):void
 			{
-				// TODO Auto-generated method stub
-				//swfLoader.
-				
 				SoundMixer.stopAll(); 
 				swfLoader.source = "";
 				swfLoader.load(null); 

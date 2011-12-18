@@ -6,19 +6,15 @@
 	</fx:Declarations>
 	<fx:Script>
 		<![CDATA[
+			//Importing Flex LIbraries
 			import com.adobe.serialization.json.JSON;
 			import com.dasflash.soundcloud.as3api.SoundcloudClient;
-			
 			import mx.collections.ArrayCollection;
-			
 			import org.osmf.media.MediaElement;
-			
 			import spark.events.IndexChangeEvent;
 			import spark.events.ViewNavigatorEvent;
 			
-			/* private var consumerKey:String = "60d657d56f451db6a5c71547606385a7";
-			private var consumerSecret = "bc4b64b3e3a0fc79516b43a06a0c8dc1";
-			private var var scClient:SoundcloudClient; */
+			/********** VARIABLES **********/
 			private var loader:URLLoader;
 			private var sndd:Sound;
 			private var sndch:SoundChannel;
@@ -26,35 +22,30 @@
 			[Bindable]
 			private var arrcoll:ArrayCollection;
 			
+			
 			protected function view1_viewActivateHandler(event:ViewNavigatorEvent):void
 			{
-				// TODO Auto-generated method stub
-				/* 
-				scClient= new SoundcloudClient(consumerKey, consumerSecret);
-				scClient.getRequestToken();
-				scClient.authorizeUser(); */
+				// Prevents the system from dropping into an idle mode.
 				NativeApplication.nativeApplication.systemIdleMode = SystemIdleMode.KEEP_AWAKE;
+				
 			}
 			
+			//Initiates the Search for entered text on SoundCloud server
+			/********** Search Button click Handler **********/
 			protected function button1_clickHandler(event:MouseEvent):void
 			{
-				// TODO Auto-generated method stub
-				/* var reqURL:String = "http://api.soundcloud.com/tracks.json?client_id=60d657d56f451db6a5c71547606385a7&q="+scSearch.text+"&limit=10";
-				var urldwn:URLLoader = new URLLoader(reqURL);
-				urldwn.load(); */
-				//var smm:
-				/* var urlreq:URLRequest = new URLRequest("http://api.soundcloud.com/tracks/14626782/stream?oauth_consumer_key=60d657d56f451db6a5c71547606385a7");
-				var sndd:Sound = new Sound();
-				sndd.load(urlreq);
-				sndd.play(); */
+				//Loading web request and initiating event listeners for Loader object
 				loader = new URLLoader();
 				configureListeners(loader);
 				var reqStr:String = "http://api.soundcloud.com/tracks.json?client_id=60d657d56f451db6a5c71547606385a7&limit=30&q=" + scSearch.text;
 				var request:URLRequest = new URLRequest(reqStr);
 				loader.load(request);
-				
 			}
-			private function configureListeners(dispatcher:IEventDispatcher):void {
+			
+			//Initializes the Listener methods for Web request Loader object
+			/********** Web request event Listener Initializer **********/
+			private function configureListeners(dispatcher:IEventDispatcher):void 
+			{
 				dispatcher.addEventListener(Event.COMPLETE, completeHandler);
 				dispatcher.addEventListener(Event.OPEN, openHandler);
 				dispatcher.addEventListener(ProgressEvent.PROGRESS, progressHandler);
@@ -63,79 +54,104 @@
 				dispatcher.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
 			}
 			
-			private function completeHandler(event:Event):void {
+			//Listens for web request completed event
+			/********** Web request completed event Handler **********/
+			private function completeHandler(event:Event):void 
+			{
+				//Sets a global array collection object with returned search results
 				var arr:Array = (JSON.decode(loader.data) as Array);
 				arrcoll = new ArrayCollection(arr);
 			}
 			
-			private function openHandler(event:Event):void {
+			private function openHandler(event:Event):void 
+			{
 				trace("openHandler: " + event);
 			}
 			
-			private function progressHandler(event:ProgressEvent):void {
+			private function progressHandler(event:ProgressEvent):void 
+			{
 				trace("progressHandler loaded:" + event.bytesLoaded + " total: " + event.bytesTotal);
 			}
 			
-			private function securityErrorHandler(event:SecurityErrorEvent):void {
+			private function securityErrorHandler(event:SecurityErrorEvent):void 
+			{
 				trace("securityErrorHandler: " + event);
 			}
 			
-			private function httpStatusHandler(event:HTTPStatusEvent):void {
+			private function httpStatusHandler(event:HTTPStatusEvent):void 
+			{
 				trace("httpStatusHandler: " + event);
 			}
 			
-			private function ioErrorHandler(event:IOErrorEvent):void {
+			private function ioErrorHandler(event:IOErrorEvent):void 
+			{
 				trace("ioErrorHandler: " + event);
 			}
 			protected function itemsList_changeHandler(event:IndexChangeEvent):void
 			{
 				// TODO Auto-generated method stub
-				
 			}
 			
+			//To play the audio 
+			/*** Play Button click Handler ***/
 			protected function button2_clickHandler(event:MouseEvent):void
 			{
-				// TODO Auto-generated method stub
+				var strmm:String;
+				var urlreq:URLRequest;
+				//Below code fetches the song ID of selected song from search result list
+				//Then Selected song ID is used to fetch and stream the selected song 
 				if(pausePosition == -1)
-				{
-					
-					var strmm:String = itemsList.selectedItem.stream_url + "?oauth_consumer_key=60d657d56f451db6a5c71547606385a7"; 
-					var urlreq:URLRequest = new URLRequest(strmm);
+				{	
+					strmm= itemsList.selectedItem.stream_url + "?oauth_consumer_key=60d657d56f451db6a5c71547606385a7"; 
+					urlreq = new URLRequest(strmm);
 					sndd= new Sound();
-					sndd.load(urlreq);
+					sndd.load(urlreq, new SoundLoaderContext(1000));
 					sndch= sndd.play();
+					pausePosition = 1;
 				}
+				else if(pausePosition == 1)
+				{
+					sndch.stop();
+					sndd.close();
+					strmm= itemsList.selectedItem.stream_url + "?oauth_consumer_key=60d657d56f451db6a5c71547606385a7"; 
+					urlreq = new URLRequest(strmm);
+					sndd= new Sound();
+					sndd.load(urlreq, new SoundLoaderContext(1000));
+					sndch= sndd.play();
+					pausePosition = 1;
+				}	
 				else
 				{
 					sndch = sndd.play(pausePosition);
 					pausePosition = -1;
 				}
-				
-				
 			}
 			
+			//To pause the video 
+			/*** Pause Button click Handler ***/
 			protected function button3_clickHandler(event:MouseEvent):void
 			{
-				// TODO Auto-generated method stub
 				pausePosition = sndch.position;
 				sndch.stop();
 			}
 			
+			//To Stop the video 
+			/*** Stop Button click Handler ***/
 			protected function button4_clickHandler(event:MouseEvent):void
 			{
-				// TODO Auto-generated method stub
 				sndch.stop();
 				sndd.close();
 			}
 			
+			//This method gets called when we switch back to any other view. Initiates cleanup operations
+			/*** Back To Home ***/
 			protected function view1_viewDeactivateHandler(event:ViewNavigatorEvent):void
 			{
-				// TODO Auto-generated method stub
 				sndch.stop();
 				sndd.close();
 				NativeApplication.nativeApplication.systemIdleMode = SystemIdleMode.NORMAL;
 			}
-			
+				
 		]]>
 	</fx:Script>
 	<s:TextInput id="scSearch" x="11" y="10" width="346" height="42"/>
