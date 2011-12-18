@@ -8,7 +8,7 @@
 		//Testing Code
 		public var selID:String;
 		private function imageClicked(e:Event):void {
-			trace("imageClicked " + data.urlID);
+			
 		}
 		
 	]]>
