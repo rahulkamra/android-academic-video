@@ -3,32 +3,24 @@
 		xmlns:s="library://ns.adobe.com/flex/spark"
 		xmlns:ytfeeds="ytfeeds.*" title="Youtube" xmlns:mx="library://ns.adobe.com/flex/mx" destructionPolicy="never" creationComplete="view1_creationCompleteHandler(event)" >
 	<fx:Declarations>
-		<!-- Place non-visual elements (e.g., services, value objects) here -->
-		<!--<s:HTTPService id="rssParse" result="rssParse_resultHandler(event)" method="GET" resultFormat="xml" >
-			
-		</s:HTTPService>-->
 	</fx:Declarations>
 	<fx:Script>
 		<![CDATA[
+			//Importing Flex LIbraries
 			import flash.events.Event;
-			
 			import mx.events.FlexEvent;
 			import mx.events.ItemClickEvent;
-			
 			import spark.components.Application;
 			import spark.events.IndexChangeEvent;
-			
 			import ytfeeds.SimpleFeedGrabberExample;
 			
 			
 			/********** VARIABLES **********/
-			[Bindable]
-			private var simpleFeedGrabberExample:SimpleFeedGrabberExample = new SimpleFeedGrabberExample();
-			[Bindable]
-			
-			
 			public var _selectedID:String = "";
 			public static var firsttime:int = 0;
+			[Bindable]
+			private var simpleFeedGrabberExample:SimpleFeedGrabberExample = new SimpleFeedGrabberExample();
+			
 			
 			/********** INIT **********/
 			public function init():void {
@@ -38,70 +30,55 @@
 				simpleFeedGrabberExample.loadMostViewed();
 			}
 			
-			/********** TAB BUTTON PRESSED **********/
-			
-			
 			/********** DO SEARCH **********/
-			public function doSearch (event:Event):void {
-				
-				
+			public function doSearch (event:Event):void 
+			{
+				//Stub Even Handler Method (To be used if required)
 			}
 			
+			//Getting & Setting the selected Video ID into a temporary Global variable
 			/********** GET SELECTED ID **********/
 			[Bindable]
 			public function get selectedID():String {
 				return _selectedID;
 			}
-			
 			/********** SET SELECTED ID **********/
 			public function set selectedID(id:String):void {
 				_selectedID = id;
-				//===--- quick hack to simplfy integration with otoh player
-				/* try {Application.application.video.text = id;}catch (e:Error){} */
-			
 			}
 			
-			
-			
+			//Initiates the Search for entered text on Youtube RSS Feed service
+			/********** Search Button click Handler **********/
 			protected function button1_clickHandler(event:MouseEvent):void
 			{
 				simpleFeedGrabberExample.loadSearch(searchTerms.text);
 				
 			}
 			
+			//Returns and Sets a temporary Global variable with selected Video ID
+			/********** Search Results List selection Handler **********/
 			protected function itemsList_changeHandler(event:IndexChangeEvent):void
 			{
-				// TODO Auto-generated method stub
 				selectedID = itemsList.selectedItem.urlID;
 				navigator.pushView(views.YouTubePlayer, selectedID);
-				
 			}
 			
 			protected function view1_creationCompleteHandler(event:FlexEvent):void
 			{
-				// TODO Auto-generated method stub
-				//if(firsttime == 0)
-					//navigator.pushView(views.FirstView);
-				
+				//Stub Even Handler Method (To be used if required)	
 			}
-			
-			
-			
-			
 		]]>
 	</fx:Script>
 	
-	
-		
-			
-		<s:List id="itemsList" x="9" y="72" width="460" height="537"
+	<!-- Items List Control to display the Search Results -->
+	<s:List id="itemsList" x="9" y="72" width="460" height="537"
 				dataProvider="{simpleFeedGrabberExample.ytVideoDetailsArrayCollection}"
 				itemRenderer="views.YoutubeThumbnail1" change="itemsList_changeHandler(event)" />
+	
+	<!-- Search Button Control -->
 	<s:Button x="361" y="10" height="44" label="Search" click="button1_clickHandler(event)"/>
+	
+	<!-- Search Text Input Control -->
 	<s:TextInput id="searchTerms" x="10" y="10" width="343" height="44" maxChars="30"
 				 restrict="A-Z a-z 012345689" text="Search"/>
-		
-	
-		
-	
 </s:View>

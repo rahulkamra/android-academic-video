@@ -3,9 +3,6 @@
 		xmlns:s="library://ns.adobe.com/flex/spark" 
 		title="Youtube"
 		viewActivate="init()" viewDeactivate="dispose()">
-	
-	
-	
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
@@ -24,21 +21,19 @@
 			 */
 			public function init():void
 			{
-				stage.autoOrients = "true";
-				//NativeApplication.nativeApplication.systemIdleMode = SystemIdleMode.KEEP_AWAKE;
+				//Enable Auto orientation for Video space
+				stage.autoOrients = true;
 				
 				// If the stage is resized/orientation changed - explained below.
 				stage.addEventListener( Event.RESIZE, onStageResize );
 				
-				
 				// Called to set the viewPort for the _stageWebView the first time
 				onStageResize();
+				
 				// Prevents the system from dropping into an idle mode.
 				NativeApplication.nativeApplication.systemIdleMode = SystemIdleMode.KEEP_AWAKE;
 				
-				
-				// Load a chromeless YouTubePlayer player 
-				// More info: http://code.google.com/apis/youtube/flash_api_reference.html#GettingStarted
+				// Loads a chromeless YouTubePlayer player 
 				loader  = new Loader();
 				loader.contentLoaderInfo.addEventListener(Event.INIT, onLoaderInit);
 				loader.load(new URLRequest("http://www.youtube.com/apiplayer?version=3"));   
@@ -47,6 +42,7 @@
 			
 			private function onStageResize( e:Event=null ):void {
 				
+				//Below code handles the resizing of video player space on changing to horizontal or vertical orientation
 				if(stage.orientation == StageOrientation.ROTATED_LEFT || stage.orientation == StageOrientation.ROTATED_RIGHT)
 				{
 					this.tabBarVisible = false;
@@ -63,24 +59,18 @@
 						player.setSize(stage.stageWidth,300 );
 				}
 			}
-			
-			
-			/**
-			 *  Player init event handler
-			 */
+						
+			/***  Player init event handler ***/
 			protected function onLoaderInit(event:Event):void {
 				
-				// Set the YouTube Player listeners
-				// More info: http://code.google.com/apis/youtube/flash_api_reference.html#Events
+				// Below code to Set the YouTube Player listeners
 				loader.content.addEventListener("onReady", onPlayerReady);
 				loader.content.addEventListener("onError", onPlayerError);
 				loader.content.addEventListener("onStateChange", onPlayerStateChange);
 			}
 			
-			/**
-			 * On Player Ready
-			 * This event is fired when the player is loaded and initialized, meaning it is ready to receive API calls.
-			 */
+			//* This event is fired when the player is loaded and initialized, meaning it is ready to receive API calls.
+			/*** On Player Ready ***/
 			protected function onPlayerReady(event:Event):void {
 				
 				player = loader.content;
@@ -98,22 +88,17 @@
 				addElement(swfLoader)				
 				swfLoader.load(player);
 				
-				
-				
 				// Play the Video
-				// The property 'data' contains the video ID passed  
-				// from the HomeView (i.e. "LDfM5c0ZKOw")
+				// The property 'data' contains the video ID passed from the YoutubeView
 				playVideo(data as String);
 			}
-			
-			/**
-			 * Video Player Stage Change
-			 * This event is fired whenever the player's state changes. 
-			 * Possible values are unstarted (-1), ended (0), playing (1),
-			 * paused (2), buffering (3), video cued (5). 
-			 * When the SWF is first loaded it will broadcast an unstarted (-1) event. 
-			 * When the video is cued and ready to play it will broadcast a video cued event (5).
-			 */
+						
+			//This event is fired whenever the player's state changes. 
+			//Possible values are unstarted (-1), ended (0), playing (1),
+			//paused (2), buffering (3), video cued (5). 
+			//When the SWF is first loaded it will broadcast an unstarted (-1) event. 
+			//When the video is cued and ready to play it will broadcast a video cued event (5).
+			/*** Video Player Stage Change ***/
 			protected function onPlayerStateChange(event:Event):void {
 				trace("Player state changed:", Object(event).data);
 				
@@ -151,38 +136,23 @@
 				
 			}
 
-			/**
-			 * Video Player Error event handler
-			 * This event is fired when an error in the player occurs.
-			 */
+			//This event is fired when an error in the player occurs.
+			/*** Video Player Error event handler ***/
 			protected function onPlayerError(event:Event):void {
 				trace("Player error:", Object(event).data);
 			}
 
-			/**
-			 * Play Video
-			 * @param	videoID		The YouTube video ID to play
-			 */
+			//This method uses the YouTube video ID to play the video
+			/*** Play Video ***/
 			public function playVideo(videoID:String) : void
 			{
-				
 				// Loads the specified video's thumbnail 
 				// and prepares the player to play the video
 				player.cueVideoById(videoID);
-				
-				// You can also use:
-				// loadVideoById
-				// cueVideoByUrl
-				
-				// More info: 
-				// http://code.google.com/apis/youtube/flash_api_reference.html#Functions
-				
 			}
-
-			/**
-			 * Dispose
-			 * Help garbage collector to remove everything from memory
-			 */
+						
+			// This is the garbage collector method to remove everything from memory
+			/*** Dispose ***/
 			public function dispose():void {
 				
 				loader.contentLoaderInfo.removeEventListener(Event.INIT, onLoaderInit);
@@ -190,12 +160,10 @@
 				loader.content.removeEventListener("onError", onPlayerError);
 				loader.content.removeEventListener("onStateChange", onPlayerStateChange);
 				
-				
 				try {
 					
 					player.stopVideo();
-					
-					// More info: http://code.google.com/apis/youtube/flash_api_reference.html#SpecialFunctions
+				//Destroys the player object. Youtube API method
 					player.destroy();
 				} catch (e:Error) { trace("error")}
 				
@@ -207,36 +175,35 @@
 				loader.unload();
 				loader = null;
 			}
-	
-			/**
-			 * Back To Home
-			 */
+						
+			//This method gets called when we switch back to any other view. Initiates cleanup operations
+			/*** Back To Home ***/
 			private function backToHome():void {
 				
 				dispose();
-				
 				// Enable the system to dropping into an idle mode.
 				NativeApplication.nativeApplication.systemIdleMode = SystemIdleMode.NORMAL;
 				
 			}
 			
-			
-			
+			//To play the video 
+			/*** Play Button click Handler ***/
 			protected function button2_clickHandler(event:MouseEvent):void
 			{
-				// TODO Auto-generated method stub
 				player.playVideo();
 			}
 			
+			//To pause the video 
+			/*** Pause Button click Handler ***/
 			protected function button3_clickHandler(event:MouseEvent):void
 			{
-				// TODO Auto-generated method stub
 				player.pauseVideo();
 			}
 			
+			//To Stop the video 
+			/*** Stop Button click Handler ***/
 			protected function button4_clickHandler(event:MouseEvent):void
 			{
-				// TODO Auto-generated method stub
 				player.seekTo(0,false);
 				player.stopVideo();
 				

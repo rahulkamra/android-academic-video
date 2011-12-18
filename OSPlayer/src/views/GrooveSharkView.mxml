@@ -6,26 +6,29 @@
 	</fx:Declarations>
 	<fx:Script>
 		<![CDATA[
+			//Importing Flex LIbraries
 			import com.adobe.serialization.json.JSON;
-			
 			import mx.collections.ArrayCollection;
-			
 			import spark.events.IndexChangeEvent;
 			import spark.events.ViewNavigatorEvent;
 			
+			/********** VARIABLES **********/
 			private var loader:URLLoader;
 			private static var pllist:String;
 			[Bindable]
 			private var arrcoll:ArrayCollection;
 			
+			
 			protected function view1_viewActivateHandler(event:ViewNavigatorEvent):void
 			{
-				// TODO Auto-generated method stub
-				//navigator.pushView(views.GrooveSharkPlayer);
+				
 			}
 			
+			//Initiates the Search for entered text on Grooveshark Tinysong server
+			/********** Search Button click Handler **********/
 			protected function button1_clickHandler(event:MouseEvent):void
 			{
+				//Loading web request and initiating event listeners for Loader object
 				loader = new URLLoader();
 				configureListeners(loader);
 				var reqStr:String = "http://tinysong.com/s/" + searchTerms.text+"?format=json&limit=30&key=d5d5997eea496a07922e003f547d1659";
@@ -34,6 +37,8 @@
 				
 			}
 			
+			//Initializes the Listener methods for Web request Loader object
+			/********** Web request event Listener Initializer **********/
 			private function configureListeners(dispatcher:IEventDispatcher):void {
 				dispatcher.addEventListener(Event.COMPLETE, completeHandler);
 				dispatcher.addEventListener(Event.OPEN, openHandler);
@@ -43,6 +48,8 @@
 				dispatcher.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
 			}
 			
+			//Listens for web request completed event
+			/********** Web request completed event Handler **********/
 			private function completeHandler(event:Event):void {
 				var arr:Array = (JSON.decode(loader.data) as Array);
 				arrcoll = new ArrayCollection(arr);
@@ -70,19 +77,20 @@
 			
 			protected function itemsList_changeHandler(event:IndexChangeEvent):void
 			{
-				// TODO Auto-generated method stub
-				//navigator.pushView(views.GrooveSharkPlayer, itemsList.selectedItem.SongID);
+				
 			}
 			
+			//Pushes the selected list of songs into Grooveshark widget View
+			/*** Play Button click Handler ***/
 			protected function button2_clickHandler(event:MouseEvent):void
 			{
-				
 				navigator.pushView(views.GrooveSharkPlayer, pllist);
 			}
 			
+			//Adds the selected songs from Search results into current Playlist
+			/*** Add to Playlist Button click Handler ***/
 			protected function button3_clickHandler(event:MouseEvent):void
 			{
-				// TODO Auto-generated method stub
 				var strr:String;
 				for (var i:int = 0; i < itemsList.selectedItems.length; i++)
 				{
@@ -92,6 +100,8 @@
 				pllabel.text = j.toString()+" Songs Selected";
 			}
 			
+			//Resets current Playlist
+			/*** Reset Button click Handler ***/
 			protected function button4_clickHandler(event:MouseEvent):void
 			{
 				// TODO Auto-generated method stub
