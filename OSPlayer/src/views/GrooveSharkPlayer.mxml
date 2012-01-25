@@ -25,7 +25,7 @@
 				
 				// Loads the GrooveShark player widget on the page with selected song IDs from previous View
 				swfLoader = new SWFLoader(); 
-				var strSNG:String = "widget.swf?songIDs="+ data as String;
+				var strSNG:String = "views/widget.swf?songIDs="+ data as String;
 				swfLoader.source = strSNG;
 				swfLoader.autoLoad = true;
 				addElement(swfLoader);
